@@ -351,11 +351,7 @@ const ProductDetail = () => {
                           {book?.price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}đ
                         </span>
                         <span className="current-price">
-                          {book?.priceDiscount.replace(
-                            /\B(?=(\d{3})+(?!\d))/g,
-                            '.'
-                          )}
-                          đ
+                          {priceDiscount.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}đ
                         </span>
                       </>
                     ) : (
