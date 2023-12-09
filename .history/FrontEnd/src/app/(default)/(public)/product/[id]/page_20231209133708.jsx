@@ -349,13 +349,13 @@ const ProductDetail = () => {
                       <>
                         <span className="old-price">
                           {book?.price
-                            .toFixed(0)
+                            .toFixed(2)
                             .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                           đ
                         </span>
                         <span className="current-price">
                           {priceDiscount
-                            .toFixed(0)
+                            .toFixed(2)
                             .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                           đ
                         </span>
