@@ -362,7 +362,7 @@ const ProductDetail = () => {
                       </>
                     ) : (
                       <span className="current-price">
-                        {book?.price.toFixed(2)} đ
+                        ${book?.price.toFixed(2)}
                       </span>
                     )}
                   </div>
