@@ -362,10 +362,7 @@ const ProductDetail = () => {
                       </>
                     ) : (
                       <span className="current-price">
-                        {book?.price
-                          .toFixed(0)
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
-                        đ
+                        {book?.price.replace(/\B(?=(\d{3})+(?!\d))/g, '.')} đ
                       </span>
                     )}
                   </div>
