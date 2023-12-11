@@ -5,7 +5,7 @@ import Raiting from '@/components/Raiting';
 import LoadingPage from '@/components/LoadingPage';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
@@ -18,13 +18,14 @@ import {
 import { getAllBooksByDiscount, getBookById } from '@/services/bookService';
 import { format } from 'date-fns';
 import { Badge } from 'antd';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
 import '../style/styled.scss';
 import '../style/SwiperButton.scss';
 import { da } from 'date-fns/locale';
 import Swal from 'sweetalert2';
 
 const ProductDetail = () => {
+  const router = useRouter();
   const [routeLoading, setRouteLoading] = useState(false);
   const [value, setValue] = useState(0);
   const [orderLength, setOrderLength] = useState(0);
@@ -35,7 +36,6 @@ const ProductDetail = () => {
   const [listCommentByBook, setListCommentByBook] = useState([]);
   const [comment, setComment] = useState('');
   const [auth, setAuth] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const cmtRef = useRef();
   const { id } = useParams();
   const parsedDate = new Date(book !== undefined && book?.datePicker);
@@ -145,6 +145,25 @@ const ProductDetail = () => {
       }
     });
   };
+  const handleBuyNow = (price) => {
+    sessionStorage.setItem('check', false);
+    const auth = sessionStorage.getItem('auth');
+    const parseAuth = JSON.parse(auth);
+    if (!auth) {
+      toast.error('Bạn chưa đăng nhập!!!');
+      return;
+    } else if (!parseAuth?.user?.isVerified) {
+      toast.warning(
+        'Tài khoản của bạn chưa được xác thực nên không thể mua sách. Vui lòng xác thực tài khoản!!!'
+      );
+      return;
+    }
+    router.push('/check-out');
+    const priceBook = sessionStorage.getItem('priceBook');
+    sessionStorage.setItem('priceBook', Number(price * count));
+    sessionStorage.setItem('count', Number(count));
+    sessionStorage.setItem('idBook', book?._id);
+  };
   useEffect(() => {
     try {
       const handleGetBookByDiscount = async () => {
@@ -191,6 +210,7 @@ const ProductDetail = () => {
       setAuth(JSON.parse(auth));
     }
   }, []);
+  console.log('check book', book);
   return (
     <section className="content">
       {isLoading ? (
@@ -199,12 +219,6 @@ const ProductDetail = () => {
         </div>
       ) : (
         <div className={`content-wrapper ${routeLoading ? 'cursor-wait' : ''}`}>
-          {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossorigin
-          ></link> */}
           <link
             href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@500&display=swap"
             rel="stylesheet"
@@ -348,24 +362,24 @@ const ProductDetail = () => {
                     {book?.discount !== 0 ? (
                       <>
                         <span className="old-price">
-                          {book?.price
-                            .toFixed(0)
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                          đ
+                          {book?.price?.toLocaleString('it-IT', {
+                            style: 'currency',
+                            currency: 'VND',
+                          })}
                         </span>
                         <span className="current-price">
-                          {priceDiscount
-                            .toFixed(0)
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                          đ
+                          {priceDiscount?.toLocaleString('it-IT', {
+                            style: 'currency',
+                            currency: 'VND',
+                          })}
                         </span>
                       </>
                     ) : (
                       <span className="current-price">
-                        {book?.price
-                          .toFixed(0)
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
-                        đ
+                        {book?.price?.toLocaleString('it-IT', {
+                          style: 'currency',
+                          currency: 'VND',
+                        })}
                       </span>
                     )}
                   </div>
@@ -391,12 +405,31 @@ const ProductDetail = () => {
                         <span className="add-text">Add To Cart</span>
                       </button>
                     </div>
-                    <button
+                    {book?.discount !== 0 ? (
+                      <button
+                        className="product-buy"
+                        onClick={() =>
+                          handleBuyNow(
+                            ((100 - book?.discount) / 100) * book?.price
+                          )
+                        }
+                      >
+                        <span className="buy-text">Buy Now</span>
+                      </button>
+                    ) : (
+                      <button
+                        className="product-buy"
+                        onClick={() => handleBuyNow(book?.price?.toFixed(2))}
+                      >
+                        <span className="buy-text">Buy Now</span>
+                      </button>
+                    )}
+                    {/* <button
                       className="product-buy"
-                      onClick={() => setIsModalOpen(!isModalOpen)}
+                      onClick={() => handleBuyNow(book?.price?.toFixed(2))}
                     >
                       <span className="buy-text">Buy Now</span>
-                    </button>
+                    </button> */}
                   </div>
                   <button className="favorite-product mt-[20px] flex justify-center items-center gap-x-[10px] m-atuo">
                     <i className="fa fa-heart-o icon-heart"></i>
@@ -548,7 +581,12 @@ const ProductDetail = () => {
                           <i className="fa fa-solid fa-star fa-2xl icon-star"></i>
                         </div>
                         <div className="item-price">
-                          <span>${item.price.toFixed(2)}</span>
+                          <span>
+                            {item?.price?.toLocaleString('it-IT', {
+                              style: 'currency',
+                              currency: 'VND',
+                            })}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -753,7 +791,7 @@ const ProductDetail = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="card-main flex items-center gap-x-5 justify-between">
+                      <div className="flex items-center justify-between card-main gap-x-5">
                         <p>{cmt?.comment}</p>
                         {auth?.user?._id === cmt?.id_user && (
                           <span
