@@ -302,23 +302,22 @@ const ProductDetail = () => {
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          )) && (
-                            <div className="flex mt-6 items-center justify-between">
-                              <div className="capitalize text-xs text-gray-500">
-                                {orderLength > maxItem
-                                  ? orderLength - maxItem
-                                  : ''}{' '}
-                                Thêm hàng vào giỏ
+                              <div className="flex mt-6 items-center justify-between">
+                                <div className="capitalize text-xs text-gray-500">
+                                  {orderLength > maxItem
+                                    ? orderLength - maxItem
+                                    : ''}{' '}
+                                  Thêm hàng vào giỏ
+                                </div>
+                                <Link
+                                  href="/cart"
+                                  className="capitalize bg-red-500 hover:bg-opacity-90 px-4 py-2 rounded-2xl text-white"
+                                >
+                                  Xem giỏ hàng
+                                </Link>
                               </div>
-                              <Link
-                                href="/cart"
-                                className="capitalize bg-red-500 hover:bg-opacity-90 px-4 py-2 rounded-2xl text-white"
-                              >
-                                Xem giỏ hàng
-                              </Link>
                             </div>
-                          )
+                          ))
                         ) : (
                           <div className="flex h-[300px] w-full items-center justify-center p-2">
                             <img
