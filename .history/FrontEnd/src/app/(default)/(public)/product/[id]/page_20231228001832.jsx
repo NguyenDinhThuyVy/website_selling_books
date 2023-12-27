@@ -43,7 +43,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const parsedDate = new Date(book !== undefined && book?.datePicker);
   const formattedDate = format(parsedDate, 'dd/MM/yyyy');
-  const maxItem = 5;
   const account =
     typeof window !== 'undefined'
       ? JSON.parse(sessionStorage?.getItem('auth'))
@@ -64,6 +63,7 @@ const ProductDetail = () => {
 
   const handleGetLengthCart = async () => {
     const { data } = await getOrderByAccount(account?.user?._id);
+    console.log(data.order[0].Book);
     if (data?.order?.length > 0) {
       setOrderLength(data?.order?.length);
     }
@@ -71,6 +71,7 @@ const ProductDetail = () => {
 
   const handleGetItemCart = async () => {
     const { data } = await getOrderByAccount(account?.user?._id);
+    console.log(data?.order[0].Book);
     if (data?.order?.length > 0) {
       setOrderItem(data?.order);
     }
@@ -269,64 +270,48 @@ const ProductDetail = () => {
                         Sản phẩm mới thêm
                       </div>
                       <div>
-                        {}
-                        {orderLength > 0 ? (
-                          orderItem.slice(0, 5).map((item) => (
-                            <div>
-                              {' '}
-                              <div className="mt-5">
-                                <div className="mt-4 flex ">
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      key={item.Book.mainImage}
-                                      src={item.Book.mainImage[0].url}
-                                      alt="anh"
-                                      className="w-11 h-11 object-cover"
-                                    />
-                                  </div>
-                                  <div
-                                    className="flex-grow ml-2 overflow-hidden"
-                                    key={item.Book.booktitle}
-                                  >
-                                    <div className="truncate">
-                                      {item.Book.booktitle}
-                                    </div>
-                                  </div>
-                                  <div
-                                    className="ml-2 flex-shrink-0"
-                                    key={item.Book.price}
-                                  >
-                                    <span className="text-orange">
-                                      {item.Book.price}
-                                    </span>
-                                  </div>
+                        {orderItem.slice(0, 5).map((item) => (
+                          <div className="mt-5">
+                            <div className="mt-4 flex ">
+                              <div className="flex-shrink-0">
+                                <img
+                                  key={item.Book.mainImage}
+                                  src={item.Book.mainImage[0].url}
+                                  alt="anh"
+                                  className="w-11 h-11 object-cover"
+                                />
+                              </div>
+                              <div
+                                className="flex-grow ml-2 overflow-hidden"
+                                key={item.Book.booktitle}
+                              >
+                                <div className="truncate">
+                                  {item.Book.booktitle}
                                 </div>
                               </div>
-                              <div className="flex mt-6 items-center justify-between">
-                                <div className="capitalize text-xs text-gray-500">
-                                  {orderLength > maxItem
-                                    ? orderLength - maxItem
-                                    : ''}{' '}
-                                  Thêm hàng vào giỏ
-                                </div>
-                                <Link
-                                  href="/cart"
-                                  className="capitalize bg-red-500 hover:bg-opacity-90 px-4 py-2 rounded-2xl text-white"
-                                >
-                                  Xem giỏ hàng
-                                </Link>
+                              <div
+                                className="ml-2 flex-shrink-0"
+                                key={item.Book.price}
+                              >
+                                <span className="text-orange">
+                                  {item.Book.price}
+                                </span>
                               </div>
                             </div>
-                          ))
-                        ) : (
-                          <div className="flex h-[300px] w-full items-center justify-center p-2">
-                            <img
-                              src="https://evgracias.com/images/no-products.jpg"
-                              alt="no purchase"
-                              className="h-full w-full"
-                            />
                           </div>
-                        )}
+                        ))}
+                      </div>
+                      <div className="flex mt-6 items-center justify-between">
+                        <div className="capitalize text-xs text-gray-500">
+                          {orderLength > 6 ? orderLength - 5 : ''}Thêm hàng vào
+                          giỏ
+                        </div>
+                        <Link
+                          href="/cart"
+                          className="capitalize bg-red-500 hover:bg-opacity-90 px-4 py-2 rounded-2xl text-white"
+                        >
+                          Xem giỏ hàng
+                        </Link>
                       </div>
                     </div>
                   </div>

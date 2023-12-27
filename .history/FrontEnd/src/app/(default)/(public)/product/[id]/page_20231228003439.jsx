@@ -64,6 +64,7 @@ const ProductDetail = () => {
 
   const handleGetLengthCart = async () => {
     const { data } = await getOrderByAccount(account?.user?._id);
+    console.log(data.order[0].Book);
     if (data?.order?.length > 0) {
       setOrderLength(data?.order?.length);
     }
@@ -71,6 +72,7 @@ const ProductDetail = () => {
 
   const handleGetItemCart = async () => {
     const { data } = await getOrderByAccount(account?.user?._id);
+    console.log(data?.order[0].Book);
     if (data?.order?.length > 0) {
       setOrderItem(data?.order);
     }

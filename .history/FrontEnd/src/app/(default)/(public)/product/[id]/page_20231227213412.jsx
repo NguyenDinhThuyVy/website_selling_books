@@ -24,14 +24,12 @@ import '../style/SwiperButton.scss';
 import { da } from 'date-fns/locale';
 import Swal from 'sweetalert2';
 import Popover from '@/components/Popover';
-import { data } from '@/app/(manage)/components/sidebar/data';
 
 const ProductDetail = () => {
   const router = useRouter();
   const [routeLoading, setRouteLoading] = useState(false);
   const [value, setValue] = useState(0);
   const [orderLength, setOrderLength] = useState(0);
-  const [orderItem, setOrderItem] = useState([]);
   const [book, setBook] = useState();
   const [bookDiscount, setBookDiscount] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +41,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const parsedDate = new Date(book !== undefined && book?.datePicker);
   const formattedDate = format(parsedDate, 'dd/MM/yyyy');
-  const maxItem = 5;
   const account =
     typeof window !== 'undefined'
       ? JSON.parse(sessionStorage?.getItem('auth'))
@@ -69,12 +66,6 @@ const ProductDetail = () => {
     }
   };
 
-  const handleGetItemCart = async () => {
-    const { data } = await getOrderByAccount(account?.user?._id);
-    if (data?.order?.length > 0) {
-      setOrderItem(data?.order);
-    }
-  };
   const handleAddCart = async () => {
     try {
       if (account) {
@@ -209,9 +200,6 @@ const ProductDetail = () => {
   useEffect(() => {
     handleGetLengthCart();
   }, [orderLength]);
-  useEffect(() => {
-    handleGetItemCart();
-  }, [orderLength]);
 
   useEffect(() => {
     fetchAllCommentByBook();
@@ -223,7 +211,7 @@ const ProductDetail = () => {
       setAuth(JSON.parse(auth));
     }
   }, []);
-
+  console.log('check book', book);
   return (
     <section className="content">
       {isLoading ? (
@@ -260,73 +248,113 @@ const ProductDetail = () => {
                 <span className="product-name">{book?.booktitle}</span>
               </nav>
             </div>
-            <div className="col-span-1 justify-self-start mr-5 items-center">
+            <div className="col-span-1 justify-self-start mr-5">
               <Popover
                 renderPopover={
-                  <div className="bg-white relative shadow-md rounded-md border border-gray-200 w-[350px] text-sm ">
+                  <div className="bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm">
                     <div className="p-2">
                       <div className="text-gray-400 capitalize">
                         Sản phẩm mới thêm
                       </div>
-                      <div>
-                        {}
-                        {orderLength > 0 ? (
-                          orderItem.slice(0, 5).map((item) => (
-                            <div>
-                              {' '}
-                              <div className="mt-5">
-                                <div className="mt-4 flex ">
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      key={item.Book.mainImage}
-                                      src={item.Book.mainImage[0].url}
-                                      alt="anh"
-                                      className="w-11 h-11 object-cover"
-                                    />
-                                  </div>
-                                  <div
-                                    className="flex-grow ml-2 overflow-hidden"
-                                    key={item.Book.booktitle}
-                                  >
-                                    <div className="truncate">
-                                      {item.Book.booktitle}
-                                    </div>
-                                  </div>
-                                  <div
-                                    className="ml-2 flex-shrink-0"
-                                    key={item.Book.price}
-                                  >
-                                    <span className="text-orange">
-                                      {item.Book.price}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex mt-6 items-center justify-between">
-                                <div className="capitalize text-xs text-gray-500">
-                                  {orderLength > maxItem
-                                    ? orderLength - maxItem
-                                    : ''}{' '}
-                                  Thêm hàng vào giỏ
-                                </div>
-                                <Link
-                                  href="/cart"
-                                  className="capitalize bg-red-500 hover:bg-opacity-90 px-4 py-2 rounded-2xl text-white"
-                                >
-                                  Xem giỏ hàng
-                                </Link>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="flex h-[300px] w-full items-center justify-center p-2">
+                      <div className="mt-5">
+                        <div className="mt-4 flex">
+                          <div className="flex-shrink-0">
                             <img
-                              src="https://evgracias.com/images/no-products.jpg"
-                              alt="no purchase"
-                              className="h-full w-full"
+                              src="https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn"
+                              alt="anh"
+                              className="w-11 h-11 object-cover"
                             />
                           </div>
-                        )}
+                          <div className="flex-grow ml-2 overflow-hidden">
+                            <div className="truncate">
+                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy
+                              SUNHOUSE SH334 16, 20, 24 cm
+                            </div>
+                          </div>
+                          <div className="ml-2 flex-shrink-0">
+                            <span className="text-orange">₫469.000</span>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex">
+                          <div className="flex-shrink-0">
+                            <img
+                              src="https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn"
+                              alt="anh"
+                              className="w-11 h-11 object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow ml-2 overflow-hidden">
+                            <div className="truncate">
+                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy
+                              SUNHOUSE SH334 16, 20, 24 cm
+                            </div>
+                          </div>
+                          <div className="ml-2 flex-shrink-0">
+                            <span className="text-orange">₫469.000</span>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex">
+                          <div className="flex-shrink-0">
+                            <img
+                              src="https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn"
+                              alt="anh"
+                              className="w-11 h-11 object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow ml-2 overflow-hidden">
+                            <div className="truncate">
+                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy
+                              SUNHOUSE SH334 16, 20, 24 cm
+                            </div>
+                          </div>
+                          <div className="ml-2 flex-shrink-0">
+                            <span className="text-orange">₫469.000</span>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex">
+                          <div className="flex-shrink-0">
+                            <img
+                              src="https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn"
+                              alt="anh"
+                              className="w-11 h-11 object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow ml-2 overflow-hidden">
+                            <div className="truncate">
+                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy
+                              SUNHOUSE SH334 16, 20, 24 cm
+                            </div>
+                          </div>
+                          <div className="ml-2 flex-shrink-0">
+                            <span className="text-orange">₫469.000</span>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex">
+                          <div className="flex-shrink-0">
+                            <img
+                              src="https://cf.shopee.vn/file/sg-11134201-22110-s3ycuwtvgvjvb4_tn"
+                              alt="anh"
+                              className="w-11 h-11 object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow ml-2 overflow-hidden">
+                            <div className="truncate">
+                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy
+                              SUNHOUSE SH334 16, 20, 24 cm
+                            </div>
+                          </div>
+                          <div className="ml-2 flex-shrink-0">
+                            <span className="text-orange">₫469.000</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex mt-6 items-center justify-between">
+                        <div className="capitalize text-xs text-gray-500">
+                          Thêm hàng vào giỏ
+                        </div>
+                        <button className="capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white">
+                          Xem giỏ hàng
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -334,7 +362,7 @@ const ProductDetail = () => {
               >
                 <Link
                   href="/cart"
-                  className="pr-[20px] flex justify-end items-center"
+                  className="pr-[20px]"
                   onClick={() => setRouteLoading(true)}
                 >
                   <Badge count={orderLength} showZero>

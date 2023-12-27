@@ -64,6 +64,7 @@ const ProductDetail = () => {
 
   const handleGetLengthCart = async () => {
     const { data } = await getOrderByAccount(account?.user?._id);
+    console.log(data.order[0].Book);
     if (data?.order?.length > 0) {
       setOrderLength(data?.order?.length);
     }
@@ -71,6 +72,7 @@ const ProductDetail = () => {
 
   const handleGetItemCart = async () => {
     const { data } = await getOrderByAccount(account?.user?._id);
+    console.log(data?.order[0].Book);
     if (data?.order?.length > 0) {
       setOrderItem(data?.order);
     }
@@ -321,7 +323,7 @@ const ProductDetail = () => {
                         ) : (
                           <div className="flex h-[300px] w-full items-center justify-center p-2">
                             <img
-                              src="https://evgracias.com/images/no-products.jpg"
+                              src="https://www.thrindle.com/static/media/emptyCart.4e943399.png"
                               alt="no purchase"
                               className="h-full w-full"
                             />
