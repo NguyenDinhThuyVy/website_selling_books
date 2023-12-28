@@ -103,13 +103,12 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 65px;
 }
-.cart-wrapper {
-  background-color: var(--bcg-detail-color);
-}
+
 /* <!-- ********** -->
 <!-- CONTAINER -->
 <!-- ********** --> */
 .container {
+  background-color: var(--bcg-detail-color);
   margin: 10px;
   position: relative;
   margin-bottom: 40px !important;
