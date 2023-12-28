@@ -240,10 +240,7 @@ const ProductDetail = () => {
   }, [category]);
   const randomCategories = listBookCategory.slice(
     Math.floor(Math.random() * listBookCategory.length),
-    Math.min(
-      Math.floor(Math.random() * listBookCategory.length) + 5,
-      listBookCategory.length
-    )
+    Math.min(Math.floor(Math.random() * listBookCategory.length) + 5, listBookCategory.length)
   );
   // console.log(listBookCategory);
   return (
@@ -923,24 +920,29 @@ const ProductDetail = () => {
             <div>
               <div className="flex max-w-full max-h-[350px] flex-row gap-x-[30px] my-3  ">
                 {listBookCategory.length > 0 &&
-                  randomCategories.slice(0, 5).map((item, index) => (
-                    <div
-                      className="max-w-[230px] max-h-[330px] flex flex-col hover:scale-110"
-                      key={index}
-                    >
-                      <Link href={`/product/${item._id}`}>
-                        {' '}
-                        <img
-                          src={item?.mainImage[0].url}
-                          alt=""
-                          className="w-[220px] h-[280px] rounded-lg pb-1 cursor-pointer"
-                        />
-                        <div className="text-xl flex  w-full font-bold hover:text-black/60 cursor-pointer">
-                          {item?.booktitle}
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+                  randomCategories
+                    .slice(
+                      0,5
+                      )
+                    )
+                    .map((item, index) => (
+                      <div
+                        className="max-w-[230px] max-h-[330px] flex flex-col hover:scale-110"
+                        key={index}
+                      >
+                        <Link href={`/product/${item._id}`}>
+                          {' '}
+                          <img
+                            src={item?.mainImage[0].url}
+                            alt=""
+                            className="w-[220px] h-[280px] rounded-lg pb-1 cursor-pointer"
+                          />
+                          <div className="text-xl flex  w-full font-bold hover:text-black/60 cursor-pointer">
+                            {item?.booktitle}
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
               </div>
             </div>
           </div>

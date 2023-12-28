@@ -15,11 +15,7 @@ import {
   getAllCommentByBook,
   postComment,
 } from '@/services/commentService';
-import {
-  getAllBooksByDiscount,
-  getBookByCategory,
-  getBookById,
-} from '@/services/bookService';
+import { getAllBooksByDiscount, getBookById } from '@/services/bookService';
 import { format } from 'date-fns';
 import { Badge } from 'antd';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -36,7 +32,6 @@ const ProductDetail = () => {
   const [value, setValue] = useState(0);
   const [orderLength, setOrderLength] = useState(0);
   const [orderItem, setOrderItem] = useState([]);
-  const [listBookCategory, setListBookCategory] = useState([]);
   const [book, setBook] = useState();
   const [bookDiscount, setBookDiscount] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -179,14 +174,6 @@ const ProductDetail = () => {
     sessionStorage.setItem('count', Number(count));
     sessionStorage.setItem('idBook', book?._id);
   };
-
-  const category = book?.category;
-  const fetchBookByAction = async () => {
-    const res = await getBookByCategory(`${category}`);
-    if (res && res?.data) {
-      setListBookCategory(res?.data?.book);
-    }
-  };
   useEffect(() => {
     try {
       const handleGetBookByDiscount = async () => {
@@ -229,23 +216,14 @@ const ProductDetail = () => {
   useEffect(() => {
     fetchAllCommentByBook();
   }, []);
+
   useEffect(() => {
     const auth = sessionStorage.getItem('auth');
     if (auth) {
       setAuth(JSON.parse(auth));
     }
   }, []);
-  useEffect(() => {
-    fetchBookByAction();
-  }, [category]);
-  const randomCategories = listBookCategory.slice(
-    Math.floor(Math.random() * listBookCategory.length),
-    Math.min(
-      Math.floor(Math.random() * listBookCategory.length) + 5,
-      listBookCategory.length
-    )
-  );
-  // console.log(listBookCategory);
+
   return (
     <section className="content">
       {isLoading ? (
@@ -921,26 +899,15 @@ const ProductDetail = () => {
               <h1>Maybe you will like</h1>
             </div>
             <div>
-              <div className="flex max-w-full max-h-[350px] flex-row gap-x-[30px] my-3  ">
-                {listBookCategory.length > 0 &&
-                  randomCategories.slice(0, 5).map((item, index) => (
-                    <div
-                      className="max-w-[230px] max-h-[330px] flex flex-col hover:scale-110"
-                      key={index}
-                    >
-                      <Link href={`/product/${item._id}`}>
-                        {' '}
-                        <img
-                          src={item?.mainImage[0].url}
-                          alt=""
-                          className="w-[220px] h-[280px] rounded-lg pb-1 cursor-pointer"
-                        />
-                        <div className="text-xl flex  w-full font-bold hover:text-black/60 cursor-pointer">
-                          {item?.booktitle}
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+              <div className="flex max-w-full max-h-[300px] flex-col  ">
+                <img
+                  src={book?.mainImage[0].url}
+                  alt=""
+                  className="max-w-[220px] max-h-[280px]"
+                />
+                <div className="text-xl flex items-center">
+                  {book?.booktitle}
+                </div>
               </div>
             </div>
           </div>
